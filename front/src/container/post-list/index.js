@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 
 import Title from "../../component/title";
 import Grid from "../../component/grid";
@@ -8,6 +8,7 @@ import PostItem from "../post-item"
 
 import { Alert, Skeleton, LOAD_STATUS } from "../../component/load";
 import {getDate} from "../../util/getDate"
+import { useWindowListener } from "../../util/useWindowListener";
 
 
 export default function Container() {
@@ -50,7 +51,23 @@ export default function Container() {
 		isEmpty: raw.list.length === 0,
 	});
 
-	if (status === null) getData();
+	useEffect(() => {
+		getData();
+
+		const intervalId = setInterval(() => getData(), 5000)
+
+		return (() => {
+			clearInterval(intervalId)		
+		})
+	}, []);
+
+	// const [position, setPosition] = useState({x: 0, y: 0});
+
+	// useWindowListener("pointermove", (e) => {
+	// 	setPosition({x: e.clientX, y: e.clientY});
+	// });
+
+	// if (status === null) getData(); - небезпечний код
 
 	return (
 		<Grid>
