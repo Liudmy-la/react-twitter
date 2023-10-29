@@ -1,6 +1,6 @@
-import { useState, useEffect} from "react";
+import { useState} from "react";
 import Page from "./component/page";
-import PostList from "./container/post-list"
+import PostList from "./container/post-list";
 
 import { useWindowListener } from "./util/useWindowListener";
 
@@ -11,23 +11,23 @@ function App() {
 		setPosition({x: e.clientX, y: e.clientY});
 	});
 
-	const [location, setLocation] = useState(null);
+	// const [location, setLocation] = useState(null);
 
-	useEffect(() => {
-		if ("geolocation" in navigator) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					const {latitude, longitude} = position.coords;
-					setLocation({latitude, longitude});
-				},
-				(error) => {
-					console.error("Помилка отримання геолокації:", error.message);
-				}
-			);
-		} else {
-			console.error("Геолокація не підтримується в цьому браузері");
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if ("geolocation" in navigator) {
+	// 		navigator.geolocation.getCurrentPosition(
+	// 			(position) => {
+	// 				const {latitude, longitude} = position.coords;
+	// 				setLocation({latitude, longitude});
+	// 			},
+	// 			(error) => {
+	// 				console.error("Помилка отримання геолокації:", error.message);
+	// 			}
+	// 		);
+	// 	} else {
+	// 		console.error("Геолокація не підтримується в цьому браузері");
+	// 	}
+	// }, []);
 
   return (
 	<Page>
@@ -40,22 +40,25 @@ function App() {
 				opacity: 0.4,
 				transform: `translate(${position.x}px, ${position.y}px)`,
 				pointerEvents: "none",
-				left: -20,
-				top: -20,
-				width: 40,
-				height: 40,
+				left: -15,
+				top: -15,
+				width: 30,
+				height: 30,
 			}}
 		/>
 
-		{location ? (
-			<div>
-				<h2>Де ви:</h2>
-				<p>Широта: {location.latitude}</p>
-				<p>Довгота: {location.longitude}</p>
-			</div>
-		) : (
-			<p>Отримання геолокації ...</p>
-		)}
+		{/* <br></br>
+			<Box>				
+				{location ? (
+					<div>
+						<h2>Де ви:</h2>
+						<p>Широта: {location.latitude}</p>
+						<p>Довгота: {location.longitude}</p>
+					</div>
+				) : (
+					<p>Отримання геолокації ...</p>
+				)}
+			</Box> */}
 	</Page>
   );
 }
