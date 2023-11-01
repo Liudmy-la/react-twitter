@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer, useState, memo, useCallback } from "react";
 
 import "./index.css";
 
@@ -8,16 +8,20 @@ import Grid from "../../component/grid";
 import {Alert, Loader} from "../../component/load";
 import { REQUEST_ACTION_TYPE, requestInitialState, requestReducer } from "../../util/request";
 
-export default function Container({onCreate, placeholder, button, id = null}) {
+function Container({onCreate, placeholder, button, id = null}) {
 	// const [status, setStatus] = useState(null);
 	// const [message, setMessage] = useState("");
 	const [state, dispatch] = useReducer(requestReducer, requestInitialState);
 
-	const handleSubmit = (value) => {
-		return sendData ({value});
-	}
-
-	const sendData = async (dataToSend) => {
+	
+	const convertData = useCallback(({value}) => JSON.stringify({
+		text: value,
+		username: "user",
+		postId: id,
+	}), [id]);
+	
+	
+	const sendData = useCallback(async (dataToSend) => {
 		dispatch({type: REQUEST_ACTION_TYPE.PROGRESS});
 
 		try {
@@ -47,13 +51,12 @@ export default function Container({onCreate, placeholder, button, id = null}) {
 			// setStatus(LOAD_STATUS.ERROR)
 				dispatch({type: REQUEST_ACTION_TYPE.ERROR, message: error.message});
 		}
-	};
+	}, [convertData, onCreate]);
 
-	const convertData = ({value}) => JSON.stringify({
-		text: value,
-		username: "user",
-		postId: id,
-	});
+
+	const handleSubmit = useCallback((value) => {
+		return sendData ({value});
+	}, [sendData]);
 
 	return (
 		<Grid>
@@ -69,3 +72,9 @@ export default function Container({onCreate, placeholder, button, id = null}) {
 		</Grid>
 	)
 }
+
+export default memo(Container, (prev, next) => {
+	console.log(prev, next);
+
+	return true;
+})

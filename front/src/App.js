@@ -5,11 +5,11 @@ import PostList from "./container/post-list";
 import { useWindowListener } from "./util/useWindowListener";
 
 function App() {
-	const [position, setPosition] = useState({x: 0, y: 0});
+	// const [position, setPosition] = useState({x: 0, y: 0});
 
-	useWindowListener("pointermove", (e) => {
-		setPosition({x: e.clientX, y: e.clientY});
-	});
+	// useWindowListener("pointermove", (e) => {
+	// 	setPosition({x: e.clientX, y: e.clientY});
+	// });
 
 	// const [location, setLocation] = useState(null);
 
@@ -32,7 +32,8 @@ function App() {
   return (
 	<Page>
 		<PostList />
-		<div
+		
+		{/* <div
 			style={{
 				position: "absolute",
 				backgroundColor: "purple",
@@ -45,7 +46,7 @@ function App() {
 				width: 30,
 				height: 30,
 			}}
-		/>
+		/> */}
 
 		{/* <br></br>
 			<Box>				

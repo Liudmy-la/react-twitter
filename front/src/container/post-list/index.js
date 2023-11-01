@@ -1,10 +1,10 @@
-import { Fragment, useEffect, useReducer } from "react";
+import { Fragment, useEffect, useReducer, lazy, Suspense, useCallback } from "react";
 
 import Title from "../../component/title";
 import Grid from "../../component/grid";
 import Box from "../../component/box";
 import PostCreate from "../post-create"
-import PostItem from "../post-item"
+// import PostItem from "../post-item"
 
 import { Alert, Skeleton } from "../../component/load";
 import {getDate} from "../../util/getDate"
@@ -12,6 +12,7 @@ import {getDate} from "../../util/getDate"
 
 import { REQUEST_ACTION_TYPE, requestInitialState, requestReducer } from "../../util/request";
 
+const PostItem = lazy(() => import("../post-item"));
 
 export default function Container() {
 	const [state, dispatch] = useReducer(requestReducer, requestInitialState)
@@ -20,7 +21,7 @@ export default function Container() {
 	// const [message, setMessage] = useState("");
 	// const [data, setData] = useState(null);
 
-	const getData = async () => {
+	const getData = useCallback(async () => {
 		// setStatus(LOAD_STATUS.PROGRESS);
 		dispatch({type: REQUEST_ACTION_TYPE.PROGRESS });
 
@@ -55,7 +56,7 @@ export default function Container() {
 				payload: error.message,
 			})
 		}
-	};
+	}, []);
 
 	const convertData = (raw) => ({
 		list: raw.list.reverse().map(({id, username, text, date}) => ({
@@ -116,6 +117,13 @@ export default function Container() {
 
 			{state.status === REQUEST_ACTION_TYPE.SUCCESS && (
 				<Fragment>
+					<Suspense
+						fallback={
+							<Box>
+								<Skeleton />
+							</Box>
+						}
+					>
 					{state.data.isEmpty ? (
 						<Alert message="Список постів пустий" />
 					) : (
@@ -125,6 +133,7 @@ export default function Container() {
 							</Fragment> 
 						))
 					)}
+					</Suspense>
 				</Fragment>
 			)}
 		</Grid>

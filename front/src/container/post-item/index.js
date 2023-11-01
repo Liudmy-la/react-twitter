@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useReducer } from "react";
+import { Fragment, useState, useEffect, useReducer, useCallback } from "react";
 
 import "./index.css";
 import PostContent from "../../component/post-content"
@@ -34,7 +34,7 @@ export default function Container({id, username, text, date}) {
 	// const [status, setStatus] = useState(null);
 	// const [message, setMessage] = useState("");	
 
-	const getData = async () => {
+	const getData = useCallback(async () => {
 		dispatch({type: REQUEST_ACTION_TYPE.PROGRESS });
 
 		try {
@@ -67,7 +67,7 @@ export default function Container({id, username, text, date}) {
 				payload: error.message,
 			})
 		}
-	};
+	}, [state.data.id]);
 
 	const convertData = ({post}) => ({
 		id: post.id,
