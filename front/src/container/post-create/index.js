@@ -74,7 +74,7 @@ function Container({onCreate, placeholder, button, id = null}) {
 }
 
 export default memo(Container, (prev, next) => {
-	console.log(prev, next);
+	// console.log(prev, next);
 
 	return true;
 })
